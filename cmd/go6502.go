@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	runtime.GOMAXPROCS(2)
+	//runtime.GOMAXPROCS(2)
 	runtime.LockOSThread()
 }
 

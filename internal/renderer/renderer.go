@@ -6,7 +6,7 @@ import (
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/se-nonide/go6502/internal/graphics"
-	"github.com/se-nonide/go6502/pkg/device"
+	"github.com/se-nonide/go6502/pkg/device6502"
 )
 
 const width = 256
@@ -16,17 +16,17 @@ const FPS = 120
 
 type Renderer struct {
 	window  *glfw.Window
-	nes     *device.NintendoEntertainmentSystem
+	nes     *device6502.Device
 	texture uint32
 }
 
 func NewRenderer(window *glfw.Window) Renderer {
-	nes, err := device.NewNintendoEntertainmentSystem()
+	nes, err := device6502.NewDevice("roms/metroid.nes")
 	if err != nil {
 		log.Fatal(err)
 	}
+	nes.Reset()
 	texture := graphics.CreateTexture()
-	log.Print(texture)
 	return Renderer{window: window, nes: nes, texture: texture}
 }
 
@@ -60,10 +60,12 @@ func (r Renderer) Run() {
 		current := glfw.GetTime()
 		deltaTime += (current - timestamp)
 		timestamp = current
+		r.nes.StepSeconds(deltaTime)
 		if deltaTime >= (1.0 / FPS) {
 			deltaTime = 0
 			r.Render()
 		}
+
 		r.window.SwapBuffers()
 		glfw.PollEvents()
 	}
@@ -114,7 +116,7 @@ func (r Renderer) drawBuffer(window *glfw.Window) {
 	gl.End()
 }
 
-func updateControllers(window *glfw.Window, nes *device.NintendoEntertainmentSystem) {
+func updateControllers(window *glfw.Window, nes *device6502.Device) {
 	/*turbo := nes.PPU.Frame%6 < 3
 	k1 := gamepad.ReadKeys(window, turbo)
 	j1 := gamepad.ReadJoystick(glfw.Joystick1, turbo)

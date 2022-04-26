@@ -1,4 +1,4 @@
-package cartridge
+package device6502
 
 import "encoding/gob"
 

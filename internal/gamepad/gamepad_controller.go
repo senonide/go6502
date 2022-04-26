@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/go-gl/glfw/v3.3/glfw"
-	"github.com/se-nonide/go6502/pkg/gamepad"
+	"github.com/se-nonide/go6502/pkg/device6502"
 )
 
 func readKey(window *glfw.Window, key glfw.Key) bool {
@@ -13,14 +13,14 @@ func readKey(window *glfw.Window, key glfw.Key) bool {
 
 func ReadKeys(window *glfw.Window, turbo bool) [8]bool {
 	var result [8]bool
-	result[gamepad.A] = readKey(window, glfw.KeyZ) || (turbo && readKey(window, glfw.KeyA))
-	result[gamepad.B] = readKey(window, glfw.KeyX) || (turbo && readKey(window, glfw.KeyS))
-	result[gamepad.Select] = readKey(window, glfw.KeyRightShift)
-	result[gamepad.Start] = readKey(window, glfw.KeyEnter)
-	result[gamepad.Up] = readKey(window, glfw.KeyUp)
-	result[gamepad.Down] = readKey(window, glfw.KeyDown)
-	result[gamepad.Left] = readKey(window, glfw.KeyLeft)
-	result[gamepad.Right] = readKey(window, glfw.KeyRight)
+	result[device6502.ButtonA] = readKey(window, glfw.KeyZ) || (turbo && readKey(window, glfw.KeyA))
+	result[device6502.ButtonB] = readKey(window, glfw.KeyX) || (turbo && readKey(window, glfw.KeyS))
+	result[device6502.ButtonSelect] = readKey(window, glfw.KeyRightShift)
+	result[device6502.ButtonStart] = readKey(window, glfw.KeyEnter)
+	result[device6502.ButtonUp] = readKey(window, glfw.KeyUp)
+	result[device6502.ButtonDown] = readKey(window, glfw.KeyDown)
+	result[device6502.ButtonLeft] = readKey(window, glfw.KeyLeft)
+	result[device6502.ButtonRight] = readKey(window, glfw.KeyRight)
 	return result
 }
 
@@ -34,27 +34,27 @@ func ReadJoystick(joy glfw.Joystick, turbo bool) [8]bool {
 	axes := glfw.Joystick1.GetAxes()
 	buttons := glfw.Joystick1.GetButtons()
 	if joyname == "PLAYSTATION(R)3 Controller" {
-		result[gamepad.A] = buttons[14] == 1 || (turbo && buttons[2] == 1)
-		result[gamepad.B] = buttons[13] == 1 || (turbo && buttons[3] == 1)
-		result[gamepad.Select] = buttons[0] == 1
-		result[gamepad.Start] = buttons[3] == 1
-		result[gamepad.Up] = buttons[4] == 1 || axes[1] < -0.5
-		result[gamepad.Down] = buttons[6] == 1 || axes[1] > 0.5
-		result[gamepad.Left] = buttons[7] == 1 || axes[0] < -0.5
-		result[gamepad.Right] = buttons[5] == 1 || axes[0] > 0.5
+		result[device6502.ButtonA] = buttons[14] == 1 || (turbo && buttons[2] == 1)
+		result[device6502.ButtonB] = buttons[13] == 1 || (turbo && buttons[3] == 1)
+		result[device6502.ButtonSelect] = buttons[0] == 1
+		result[device6502.ButtonStart] = buttons[3] == 1
+		result[device6502.ButtonUp] = buttons[4] == 1 || axes[1] < -0.5
+		result[device6502.ButtonDown] = buttons[6] == 1 || axes[1] > 0.5
+		result[device6502.ButtonLeft] = buttons[7] == 1 || axes[0] < -0.5
+		result[device6502.ButtonRight] = buttons[5] == 1 || axes[0] > 0.5
 		return result
 	}
 	if len(buttons) < 8 {
 		return result
 	}
-	result[gamepad.A] = buttons[0] == 1 || (turbo && buttons[2] == 1)
-	result[gamepad.B] = buttons[1] == 1 || (turbo && buttons[3] == 1)
-	result[gamepad.Select] = buttons[6] == 1
-	result[gamepad.Start] = buttons[7] == 1
-	result[gamepad.Up] = axes[1] < -0.5
-	result[gamepad.Down] = axes[1] > 0.5
-	result[gamepad.Left] = axes[0] < -0.5
-	result[gamepad.Right] = axes[0] > 0.5
+	result[device6502.ButtonA] = buttons[0] == 1 || (turbo && buttons[2] == 1)
+	result[device6502.ButtonB] = buttons[1] == 1 || (turbo && buttons[3] == 1)
+	result[device6502.ButtonSelect] = buttons[6] == 1
+	result[device6502.ButtonStart] = buttons[7] == 1
+	result[device6502.ButtonUp] = axes[1] < -0.5
+	result[device6502.ButtonDown] = axes[1] > 0.5
+	result[device6502.ButtonLeft] = axes[0] < -0.5
+	result[device6502.ButtonRight] = axes[0] > 0.5
 	return result
 }
 

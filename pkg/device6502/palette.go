@@ -1,4 +1,4 @@
-package device
+package device6502
 
 import "image/color"
 
