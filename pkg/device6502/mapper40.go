@@ -4,16 +4,18 @@ import (
 	"encoding/gob"
 	"fmt"
 	"log"
+
+	"github.com/se-nonide/go6502/pkg/cartridge"
 )
 
 type Mapper40 struct {
-	*Cartridge
+	*cartridge.Cartridge
 	device *Device
 	bank   int
 	cycles int
 }
 
-func NewMapper40(device *Device, cartridge *Cartridge) Mapper {
+func NewMapper40(device *Device, cartridge *cartridge.Cartridge) Mapper {
 	return &Mapper40{cartridge, device, 0, 0}
 }
 

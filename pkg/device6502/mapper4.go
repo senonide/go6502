@@ -3,10 +3,12 @@ package device6502
 import (
 	"encoding/gob"
 	"log"
+
+	"github.com/se-nonide/go6502/pkg/cartridge"
 )
 
 type Mapper4 struct {
-	*Cartridge
+	*cartridge.Cartridge
 	device     *Device
 	register   byte
 	registers  [8]byte
@@ -19,7 +21,7 @@ type Mapper4 struct {
 	irqEnable  bool
 }
 
-func NewMapper4(device *Device, cartridge *Cartridge) Mapper {
+func NewMapper4(device *Device, cartridge *cartridge.Cartridge) Mapper {
 	m := Mapper4{Cartridge: cartridge, device: device}
 	m.prgOffsets[0] = m.prgBankOffset(0)
 	m.prgOffsets[1] = m.prgBankOffset(1)
@@ -62,7 +64,7 @@ func (m *Mapper4) Step() {
 	if ppu.ScanLine > 239 && ppu.ScanLine < 261 {
 		return
 	}
-	if ppu.flagShowBackground == 0 && ppu.flagShowSprites == 0 {
+	if ppu.IsHidingGraphics() {
 		return
 	}
 	m.HandleScanLine()

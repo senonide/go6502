@@ -3,10 +3,12 @@ package device6502
 import (
 	"encoding/gob"
 	"log"
+
+	"github.com/se-nonide/go6502/pkg/cartridge"
 )
 
 type Mapper1 struct {
-	*Cartridge
+	*cartridge.Cartridge
 	shiftRegister byte
 	control       byte
 	prgMode       byte
@@ -18,7 +20,7 @@ type Mapper1 struct {
 	chrOffsets    [2]int
 }
 
-func NewMapper1(cartridge *Cartridge) Mapper {
+func NewMapper1(cartridge *cartridge.Cartridge) Mapper {
 	m := Mapper1{}
 	m.Cartridge = cartridge
 	m.shiftRegister = 0x10

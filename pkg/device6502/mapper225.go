@@ -3,16 +3,18 @@ package device6502
 import (
 	"encoding/gob"
 	"log"
+
+	"github.com/se-nonide/go6502/pkg/cartridge"
 )
 
 type Mapper225 struct {
-	*Cartridge
+	*cartridge.Cartridge
 	chrBank  int
 	prgBank1 int
 	prgBank2 int
 }
 
-func NewMapper225(cartridge *Cartridge) Mapper {
+func NewMapper225(cartridge *cartridge.Cartridge) Mapper {
 	prgBanks := len(cartridge.PRG) / 0x4000
 	return &Mapper225{cartridge, 0, 0, prgBanks - 1}
 }

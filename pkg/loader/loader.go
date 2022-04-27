@@ -1,11 +1,12 @@
-package device6502
+package loader
 
 import (
 	"encoding/binary"
 	"errors"
 	"io"
-	"log"
 	"os"
+
+	"github.com/se-nonide/go6502/pkg/cartridge"
 )
 
 const iNESFileMagic = 0x1a53454e
@@ -20,8 +21,7 @@ type iNESFileHeader struct {
 	_        [7]byte // unused padding
 }
 
-func LoadNESFile(path string) (*Cartridge, error) {
-	defer log.Printf("Cartridge loaded successfully")
+func LoadNESFile(path string) (*cartridge.Cartridge, error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -68,5 +68,5 @@ func LoadNESFile(path string) (*Cartridge, error) {
 		chr = make([]byte, 8192)
 	}
 
-	return NewCartridge(prg, chr, mapper, mirror, battery), nil
+	return cartridge.NewCartridge(prg, chr, mapper, mirror, battery), nil
 }

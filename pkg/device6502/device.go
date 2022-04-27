@@ -7,27 +7,32 @@ import (
 	"log"
 	"os"
 	"path"
+
+	"github.com/se-nonide/go6502/pkg/cartridge"
+	"github.com/se-nonide/go6502/pkg/controller"
+	"github.com/se-nonide/go6502/pkg/loader"
+	"github.com/se-nonide/go6502/pkg/pallete"
 )
 
 type Device struct {
 	CPU         *CPU
 	APU         *APU
 	PPU         *PPU
-	Cartridge   *Cartridge
-	Controller1 *Controller
-	Controller2 *Controller
+	Cartridge   *cartridge.Cartridge
+	Controller1 *controller.Controller
+	Controller2 *controller.Controller
 	Mapper      Mapper
 	RAM         []byte
 }
 
 func NewDevice(path string) (*Device, error) {
-	cartridge, err := LoadNESFile(path)
+	cartridge, err := loader.LoadNESFile(path)
 	if err != nil {
 		return nil, err
 	}
 	ram := make([]byte, 2048)
-	controller1 := NewController()
-	controller2 := NewController()
+	controller1 := controller.NewController()
+	controller2 := controller.NewController()
 	device := Device{
 		nil, nil, nil, cartridge, controller1, controller2, nil, ram}
 	mapper, err := NewMapper(&device)
@@ -81,7 +86,7 @@ func (device *Device) Buffer() *image.RGBA {
 }
 
 func (device *Device) BackgroundColor() color.RGBA {
-	return Palette[device.PPU.readPalette(0)%64]
+	return pallete.Palette[device.PPU.readPalette(0)%64]
 }
 
 func (device *Device) SetButtons1(buttons [8]bool) {
@@ -98,9 +103,7 @@ func (device *Device) SetAudioChannel(channel chan float32) {
 
 func (device *Device) SetAudioSampleRate(sampleRate float64) {
 	if sampleRate != 0 {
-		// Convert samples per second to cpu steps per sample
 		device.APU.sampleRate = CPUFrequency / sampleRate
-		// Initialize filters
 		device.APU.filterChain = FilterChain{
 			HighPassFilter(float32(sampleRate), 90),
 			HighPassFilter(float32(sampleRate), 440),

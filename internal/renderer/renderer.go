@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-gl/gl/v2.1/gl"
 	"github.com/go-gl/glfw/v3.3/glfw"
+	"github.com/se-nonide/go6502/internal/gamepad"
 	"github.com/se-nonide/go6502/internal/graphics"
 	"github.com/se-nonide/go6502/pkg/device6502"
 )
@@ -12,7 +13,7 @@ import (
 const width = 256
 const height = 240
 const scale = 4
-const FPS = 120
+const FPS = 240
 
 type Renderer struct {
 	window  *glfw.Window
@@ -20,8 +21,8 @@ type Renderer struct {
 	texture uint32
 }
 
-func NewRenderer(window *glfw.Window) Renderer {
-	nes, err := device6502.NewDevice("roms/metroid.nes")
+func NewRenderer(window *glfw.Window, path string) Renderer {
+	nes, err := device6502.NewDevice(path)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -30,7 +31,7 @@ func NewRenderer(window *glfw.Window) Renderer {
 	return Renderer{window: window, nes: nes, texture: texture}
 }
 
-func Start() {
+func Start(path string) {
 	err := glfw.Init()
 	if err != nil {
 		log.Fatal(err)
@@ -47,7 +48,7 @@ func Start() {
 	}
 	gl.Enable(gl.TEXTURE_2D)
 	gl.ClearColor(0, 0, 0, 1)
-	renderer := NewRenderer(window)
+	renderer := NewRenderer(window, path)
 	renderer.Run()
 }
 
@@ -72,11 +73,9 @@ func (r Renderer) Run() {
 }
 
 func (r Renderer) Render() {
-	window := r.window
-	nes := r.nes
-	updateControllers(window, nes)
+	updateControllers(r.window, r.nes)
 	gl.BindTexture(gl.TEXTURE_2D, r.texture)
-	graphics.SetTexture(nes.Buffer())
+	graphics.SetTexture(r.nes.Buffer())
 	r.drawBuffer(r.window)
 	gl.BindTexture(gl.TEXTURE_2D, 0)
 }
@@ -117,10 +116,10 @@ func (r Renderer) drawBuffer(window *glfw.Window) {
 }
 
 func updateControllers(window *glfw.Window, nes *device6502.Device) {
-	/*turbo := nes.PPU.Frame%6 < 3
+	turbo := nes.PPU.Frame%6 < 3
 	k1 := gamepad.ReadKeys(window, turbo)
 	j1 := gamepad.ReadJoystick(glfw.Joystick1, turbo)
 	j2 := gamepad.ReadJoystick(glfw.Joystick2, turbo)
 	nes.SetButtons1(gamepad.CombineButtons(k1, j1))
-	nes.SetButtons2(j2)*/
+	nes.SetButtons2(j2)
 }

@@ -3,6 +3,8 @@ package device6502
 import (
 	"encoding/gob"
 	"image"
+
+	"github.com/se-nonide/go6502/pkg/pallete"
 )
 
 type PPU struct {
@@ -189,6 +191,10 @@ func (ppu *PPU) Reset() {
 	ppu.writeControl(0)
 	ppu.writeMask(0)
 	ppu.writeOAMAddress(0)
+}
+
+func (ppu *PPU) IsHidingGraphics() bool {
+	return ppu.flagShowBackground == 0 && ppu.flagShowSprites == 0
 }
 
 func (ppu *PPU) readPalette(address uint16) byte {
@@ -563,7 +569,7 @@ func (ppu *PPU) renderPixel() {
 			color = background
 		}
 	}
-	c := Palette[ppu.readPalette(uint16(color))%64]
+	c := pallete.Palette[ppu.readPalette(uint16(color))%64]
 	ppu.back.SetRGBA(x, y, c)
 }
 
