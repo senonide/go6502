@@ -3,6 +3,12 @@ Nintendo Entertainment System (NES) and Famicom emulator written in Go
 
 <img src="assets/nes.png" alt="NES"/>
 
+## Dependencies
+```
+go get -u github.com/go-gl/gl
+go get -u github.com/go-gl/glfw/v3.3/glfw
+```
+
 ## Build and run
 For build and run: 
 ```
