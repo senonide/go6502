@@ -11,10 +11,10 @@ go build cmd/go6502.go
 ```
 
 ## TODO
-[ ] Implement a sound system
-[ ] Implement a configuration system for the gamepad
-[ ] Improve performance
-[ ] Implement debug tools
+ - [ ] Implement a sound system
+ - [ ] Implement a configuration system for the gamepad
+ - [ ] Improve performance
+ - [ ] Implement debug tools
 
 ## Screenshots
 <img src="assets/Screenshot_1.png" alt="NES"/>
