@@ -41,6 +41,7 @@ func Start(path string) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	window.SetSizeLimits(width*scale, height*scale, width*scale, height*scale)
 	window.MakeContextCurrent()
 	err = gl.Init()
 	if err != nil {
