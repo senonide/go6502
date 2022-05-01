@@ -24,4 +24,5 @@ go build cmd/go6502.go
 
 ## Screenshots
 <img src="assets/Screenshot_1.png" alt="NES"/>
+<img src="assets/Screenshot_3.png" alt="NES"/>
 <img src="assets/Screenshot_2.png" alt="NES"/>
